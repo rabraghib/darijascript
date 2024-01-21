@@ -1,0 +1,21 @@
+# FizzBuzz
+
+fizzBuzz(100);
+
+fonksyon fizzBuzz(n) {
+    9ayed i = 1;
+    ma7dBa9i(i < n) {
+        9ayed result = "";
+        ilakan (i % 3 == 0) {
+            result = result + "Fizz";
+        }
+        ilakan (i % 5 == 0) {
+            result = result + "Buzz";
+        }
+        ilakan (result == "") {
+            golih(i);
+        } sinn {
+            golih(result);
+        } 
+    }
+}

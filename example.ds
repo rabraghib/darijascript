@@ -1,0 +1,61 @@
+# DarijaLang Example
+
+# Variables and Data Types
+9ayed numero = 42;
+9ayed texte = "Salam, Sbah lkhir!";
+9ayed wa7dMnJoj = true;
+9ayed wa7dMnJoj2 = false;
+9ayed wa7dMnJojDarija = s7i7;
+9ayed wa7dMnJojDarija2 = ghalt;
+
+# Arithmetic operations
+9ayed ljam3 = 5 + 10;
+9ayed darb = 3 * 7;
+
+# Control Flow
+ilakan (wa7dMnJoj) {
+    golih("Howa hadak!");
+} sinn {
+    golih("Machi howa hakda!");
+}
+
+// ifn't
+ilamakanch (true) {
+    golih("3lach la matkonch ifn't?!");
+}
+
+# Loops
+9ayed i = 0;
+ma7dBa9i(i < 5) {
+    golih(i);
+    i = i + 1;
+}
+
+# Functions
+fonksyon jma(x, y) {
+    rjje3 x + y;
+}
+
+9ayed total = jma(3, 4);
+golih(nata9a);
+
+# Comments
+# Hadshi comment wahd
+/*
+    Hadshi comment multi line
+*/
+
+/*
+# Input/Output
+9ayed smiya = dakhel("Daba smiytk: ");
+golih("Salam, " + smiya + "!");
+
+# Lists/Arrays
+9ayed al3dad = [1, 2, 3, 4, 5];
+golih(al3dad[2]);  # ayrd 3
+
+# Dictionary/Map
+9ayed shakhs = {"ism": "Fatima", "3omr": 25};
+golih(shakhs["ism"]);  # ayrd "Fatima"
+
+*/
