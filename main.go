@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rabraghib/darija-script/src"
+	"github.com/rabraghib/darija-script/src/interpreter"
 	"github.com/rabraghib/darija-script/src/lexer"
 	"github.com/rabraghib/darija-script/src/parser"
 )
@@ -35,7 +35,11 @@ func main() {
 	// Parse the source code and build the AST
 	program := p.ParseProgram()
 
-	// Print the AST
-	src.LogObject(program)
-
+	// Initialize interpreter
+	eval := interpreter.NewEvaluator()
+	_, err = eval.EvaluateProgram(program)
+	if err != nil {
+		fmt.Println("Error evaluating program:", err)
+		os.Exit(1)
+	}
 }

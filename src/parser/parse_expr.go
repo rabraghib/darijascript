@@ -23,121 +23,81 @@ func (p *Parser) parseTreeExpression(tree []*TokenTreeItem) Expression {
 	if len(tree) == 0 {
 		return nil
 	}
-	if tree[0].Token.Type == lexer.TT_LPAREN {
-		return p.parseTreeExpression(tree[0].children)
-	}
 	if len(tree) == 1 {
+		if tree[0].Token.Type == lexer.TT_LPAREN {
+			return p.parseTreeExpression(tree[0].children)
+		}
 		return p.parseSingleExpression(tree[0].Token)
 	}
-	// TODO: This has a bug, it should be fixed
-	if tree[0].Token.Type == lexer.TT_NOT {
-		return &PrefixExpression{
-			Operator: tree[0].Token.Literal,
-			Right:    p.parseTreeExpression(tree[1:]),
+
+	switch tree[1].Token.Type {
+	case lexer.TT_PLUS,
+		lexer.TT_MINUS,
+		lexer.TT_MULTIPLY,
+		lexer.TT_DIVIDE,
+		lexer.TT_MODULO,
+		lexer.TT_EQUAL,
+		lexer.TT_NOT_EQUAL,
+		lexer.TT_LESS_THAN,
+		lexer.TT_LESS_EQUAL,
+		lexer.TT_GREATER_THAN,
+		lexer.TT_GREATER_EQUAL:
+		if len(tree) == 3 {
+			return &InfixExpression{
+				Left:     p.parseTreeExpression(tree[:1]),
+				Operator: tree[1].Token.Literal,
+				Right:    p.parseTreeExpression(tree[2:]),
+			}
 		}
-	}
-	if tree[0].Token.Type == lexer.TT_MINUS {
-		return &PrefixExpression{
-			Operator: tree[0].Token.Literal,
-			Right:    p.parseTreeExpression(tree[1:]),
+		newTree := []*TokenTreeItem{
+			{
+				Token: &lexer.Token{
+					Type:    lexer.TT_LPAREN,
+					Literal: "(",
+				},
+				children: []*TokenTreeItem{
+					tree[0],
+					tree[1],
+					tree[2],
+				},
+			},
 		}
-	}
-	if tree[0].Token.Type == lexer.TT_PLUS {
-		return &PrefixExpression{
-			Operator: tree[0].Token.Literal,
-			Right:    p.parseTreeExpression(tree[1:]),
-		}
+		newTree = append(newTree, tree[3:]...)
+		return p.parseTreeExpression(newTree)
 	}
 
-	if tree[1].Token.Type == lexer.TT_PLUS {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
+	switch tree[0].Token.Type {
+	case lexer.TT_PLUS, lexer.TT_MINUS, lexer.TT_NOT:
+		if len(tree) == 2 {
+			return &PrefixExpression{
+				Operator: tree[0].Token.Literal,
+				Right:    p.parseTreeExpression(tree[1:]),
+			}
 		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_MINUS {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
+		newTree := []*TokenTreeItem{
+			{
+				Token: &lexer.Token{
+					Type:    lexer.TT_LPAREN,
+					Literal: "(",
+				},
+				children: []*TokenTreeItem{
+					tree[0],
+					tree[1],
+				},
+			},
 		}
-	}
+		newTree = append(newTree, tree[2:]...)
+		return p.parseTreeExpression(newTree)
 
-	if tree[1].Token.Type == lexer.TT_MULTIPLY {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
+	case lexer.TT_LBRACKET:
+		arrayLiteral := &ArrayLiteral{}
+		arrayLiteral.Elements = []Expression{}
+		for _, child := range tree[0].children {
+			arrayLiteral.Elements = append(arrayLiteral.Elements, p.parseTreeExpression([]*TokenTreeItem{child}))
 		}
-	}
+		return arrayLiteral
 
-	if tree[1].Token.Type == lexer.TT_DIVIDE {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_MODULO {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_EQUAL {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_NOT_EQUAL {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_LESS_THAN {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_LESS_EQUAL {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_GREATER_THAN {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[1].Token.Type == lexer.TT_GREATER_EQUAL {
-		return &InfixExpression{
-			Left:     p.parseTreeExpression(tree[:1]),
-			Operator: tree[1].Token.Literal,
-			Right:    p.parseTreeExpression(tree[2:]),
-		}
-	}
-
-	if tree[0].Token.Type == lexer.TT_IDENTIFIER {
+	case lexer.TT_IDENTIFIER:
 		if tree[1].Token.Type == lexer.TT_LPAREN {
 			callExpression := &CallExpression{}
 			callExpression.Function = Identifier{Value: tree[0].Token.Literal}
@@ -180,15 +140,6 @@ func (p *Parser) parseTreeExpression(tree []*TokenTreeItem) Expression {
 		}
 	}
 
-	if tree[0].Token.Type == lexer.TT_LBRACKET {
-		arrayLiteral := &ArrayLiteral{}
-		arrayLiteral.Elements = []Expression{}
-		for _, child := range tree[0].children {
-			arrayLiteral.Elements = append(arrayLiteral.Elements, p.parseTreeExpression([]*TokenTreeItem{child}))
-		}
-		return arrayLiteral
-	}
-
 	return nil
 }
 
@@ -217,20 +168,27 @@ func (p *Parser) parseSingleExpression(token *lexer.Token) Expression {
 }
 
 func (p *Parser) buildTokensTree(tokens []*lexer.Token) []*TokenTreeItem {
+	tree, _ := p.buildTokensTreeInt(tokens)
+	return tree
+}
+
+func (p *Parser) buildTokensTreeInt(tokens []*lexer.Token) ([]*TokenTreeItem, int) {
 	var tree []*TokenTreeItem
-	for index := 0; index < len(tokens); index++ {
+	var index int
+	for index = 0; index < len(tokens); index++ {
 		token := tokens[index]
-		if token.Type == lexer.TT_LPAREN || token.Type == lexer.TT_LBRACKET {
-			tree = append(tree, &TokenTreeItem{Token: token, children: p.buildTokensTree(tokens[index+1:])})
-			index++
+		if token.Type == lexer.TT_LPAREN {
+			children, intIndex := p.buildTokensTreeInt(tokens[index+1:])
+			tree = append(tree, &TokenTreeItem{Token: token, children: children})
+			index += intIndex
 			continue
 		}
-		if token.Type == lexer.TT_RPAREN || token.Type == lexer.TT_LBRACKET {
+		if token.Type == lexer.TT_RPAREN {
 			break
 		}
 		tree = append(tree, &TokenTreeItem{Token: token})
 	}
-	return tree
+	return tree, index
 }
 
 type TokenTreeItem struct {

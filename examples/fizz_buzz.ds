@@ -12,10 +12,11 @@ fonksyon fizzBuzz(n) {
         ilakan (i % 5 == 0) {
             result = result + "Buzz";
         }
-        ilakan (result == "") {
-            golih(i);
-        } sinn {
+        ilamakanch (result == "") {
             golih(result);
-        } 
+        } sinn {
+            golih(i);
+        }
+        i = i + 1;
     }
 }

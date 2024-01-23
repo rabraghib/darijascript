@@ -40,7 +40,7 @@ func (l *Lexer) readString() string {
 			break
 		}
 	}
-	return l.input[position:l.position]
+	return l.input[position : l.position-1]
 }
 
 func (l *Lexer) skipWhitespace() {
@@ -76,6 +76,7 @@ func (l *Lexer) readMultiLineComment() string {
 		}
 		if l.ch == '*' && l.peekChar() == '/' {
 			endPosition = l.position
+			l.readChar() // consume '*'
 			l.readChar() // consume '/'
 			break
 		}

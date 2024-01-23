@@ -12,6 +12,9 @@
 9ayed ljam3 = 5 + 10;
 9ayed darb = 3 * 7;
 
+golih("ljam3 = " + ljam3);
+golih("darb = " + darb);
+
 # Control Flow
 ilakan (wa7dMnJoj) {
     golih("Howa hadak!");
@@ -20,7 +23,7 @@ ilakan (wa7dMnJoj) {
 }
 
 // ifn't
-ilamakanch (true) {
+ilamakanch (!true) {
     golih("3lach la matkonch ifn't?!");
 }
 
@@ -37,7 +40,7 @@ fonksyon jma(x, y) {
 }
 
 9ayed total = jma(3, 4);
-golih(nata9a);
+golih(total);
 
 # Comments
 # Hadshi comment wahd
@@ -45,10 +48,13 @@ golih(nata9a);
     Hadshi comment multi line
 */
 
-/*
+
 # Input/Output
 9ayed smiya = dakhel("Daba smiytk: ");
 golih("Salam, " + smiya + "!");
+
+/*
+Should I add these?
 
 # Lists/Arrays
 9ayed al3dad = [1, 2, 3, 4, 5];
@@ -57,5 +63,4 @@ golih(al3dad[2]);  # ayrd 3
 # Dictionary/Map
 9ayed shakhs = {"ism": "Fatima", "3omr": 25};
 golih(shakhs["ism"]);  # ayrd "Fatima"
-
 */
