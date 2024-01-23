@@ -3,8 +3,9 @@
 fizzBuzz(100);
 
 fonksyon fizzBuzz(n) {
-    9ayed i = 1;
+    9ayed i = 0;
     ma7dBa9i(i < n) {
+        i = i + 1;
         9ayed result = "";
         ilakan (i % 3 == 0) {
             result = result + "Fizz";
@@ -17,6 +18,5 @@ fonksyon fizzBuzz(n) {
         } sinn {
             golih(i);
         }
-        i = i + 1;
     }
 }
