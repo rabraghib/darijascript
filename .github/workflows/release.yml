@@ -1,0 +1,58 @@
+name: 🚀 Build & Release
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  release-up:
+    runs-on: ubuntu-20.04
+    outputs:
+      tag: ${{ steps.releaser.outputs.tag }}
+      version: ${{ steps.releaser.outputs.version }}
+      released: ${{ steps.releaser.outputs.released }}
+      release_notes: ${{ steps.releaser.outputs.release_notes }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: rabraghib/releaser-action@v1
+        id: releaser
+        with:
+          bump-files: |
+            language-service/package.json
+          output-file: docs/CHANGELOG.md
+  build-deploy:
+    if: needs.release-up.outputs.released == 'true'
+    needs: release-up
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'main'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.20.7
+      - name: Build for Windows, Linux, and macOS
+        run: |
+          GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-linux .
+          GOOS=windows GOARCH=amd64 go build -buildvcs=false -o bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-windows.exe .
+          GOOS=darwin GOARCH=amd64 go build -buildvcs=false -o bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-macos .
+      - name: Build vscode extension
+        run: |
+          npm install -g @vscode/vsce
+          cd language-service
+          vsce package ${{ needs.release-up.outputs.version }} -o ../bin/darijascript-vscode-extension-${{ needs.release-up.outputs.tag }}.vsix
+      - name: Archive vscode extension
+        uses: actions/upload-artifact@v2
+        with:
+          name: darijascript-vscode-extension
+          path: language-service/*.vsix
+      - uses: softprops/action-gh-release@v1
+        with:
+          name: 'DarijaScript ${{ needs.release-up.outputs.tag }}'
+          tag_name: ${{ needs.release-up.outputs.tag }}
+          body: ${{ needs.release-up.outputs.release_notes }}
+          files: |
+            bin/*

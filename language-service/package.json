@@ -1,0 +1,58 @@
+{
+  "name": "ds-language-service",
+  "version": "0.0.1",
+  "publisher": "rabraghib",
+  "displayName": "DarijaScript Language Service",
+  "description": "Provides syntax highlighting and bracket matching for DarijaScript.",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#007ACC",
+    "theme": "dark"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rabraghib/darijascript"
+  },
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "iconThemes": [
+      {
+        "id": "ds-icon-theme",
+        "label": "DarijaScript Icon Theme",
+        "path": "./images/darijascript-icon-theme.json"
+      }
+    ],
+    "languages": [
+      {
+        "id": "darijascript",
+        "aliases": [
+          "DarijaScript",
+          "ds"
+        ],
+        "extensions": [
+          ".ds"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "darijascript",
+        "scopeName": "source.darijascript",
+        "path": "./syntaxes/darijascript.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "darijascript",
+        "path": "./snippets/darijascript.json"
+      }
+    ]
+  }
+}

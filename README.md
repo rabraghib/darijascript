@@ -1,6 +1,10 @@
+<img align="right" src="language-service/images/icon.png" alt="DarijaScript Logo" width="100" height="100">
+
 # DarijaScript
 
 DarijaScript is a programming language inspired by the Moroccan Arabic language.
+
+<br clear="right"/>
 
 ## Note
 
@@ -10,22 +14,31 @@ Have fun exploring and playing around with DarijaScript!
 
 ## Getting Started
 
+You can get started with DarijaScript by using the [DarijaScript Starter](https://github.com/rabraghib/darijascript-starter) template.
+
 ### Installation
 
-Coming soon...
+To install DarijaScript, you need to have [Go](https://go.dev/) installed.
+After installing Go, you can use the following command to install DarijaScript:
+
+```bash
+go install github.com/rabraghib/darijascript@latest
+```
+
+Make sure your Go bin directory is in your system's PATH.
 
 ### Usage
 
 You can either write your DarijaScript code in a file and run it:
 
 ```bash
-darija-script run my_program.ds
+darijascript run my_program.ds
 ```
 
 Or you can run DarijaScript in interactive mode:
 
 ```bash
-darija-script interactive
+darijascript interactive
 ```
 
 ### Examples
@@ -42,7 +55,7 @@ Contributions are always welcome!
 
 If you want to show some support, you can:
 
-- Give [DarijaScript repo](https://github.com/rabraghib/darija-script) a star ⭐ on Github.
+- Give [DarijaScript repo](https://github.com/rabraghib/darijascript) a star ⭐ on Github.
 - Follow [@rabraghib](https://twitter.com/rabraghib) on Twitter to stay up to date with all the cool stuff happening.
 - 💰 Help DarijaScript grow and be more awesome: [Buy me a coffee](https://www.buymeacoffee.com/rabraghib).
 

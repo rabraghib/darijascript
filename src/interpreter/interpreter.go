@@ -5,7 +5,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/rabraghib/darija-script/src/parser"
+	"github.com/rabraghib/darijascript/src/parser"
 )
 
 type Evaluator struct {

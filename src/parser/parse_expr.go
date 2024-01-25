@@ -3,7 +3,7 @@ package parser
 import (
 	"strconv"
 
-	"github.com/rabraghib/darija-script/src/lexer"
+	"github.com/rabraghib/darijascript/src/lexer"
 )
 
 func (p *Parser) parseExpression() Expression {
@@ -182,8 +182,8 @@ func (p *Parser) buildTokensTreeInt(tokens []*lexer.Token) ([]*TokenTreeItem, in
 			tree = append(tree, &TokenTreeItem{Token: token, children: children})
 			index += intIndex
 			continue
-		}
-		if token.Type == lexer.TT_RPAREN {
+		} else if token.Type == lexer.TT_RPAREN {
+			index++
 			break
 		}
 		tree = append(tree, &TokenTreeItem{Token: token})

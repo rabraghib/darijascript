@@ -1,6 +1,6 @@
 package parser
 
-import "github.com/rabraghib/darija-script/src/lexer"
+import "github.com/rabraghib/darijascript/src/lexer"
 
 type Parser struct {
 	errors []string

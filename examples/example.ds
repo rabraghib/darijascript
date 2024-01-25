@@ -16,7 +16,7 @@ golih("ljam3 = " + ljam3);
 golih("darb = " + darb);
 
 # Control Flow
-ilakan (wa7dMnJoj) {
+ilakan (wa7dMnJojDarija2) {
     golih("Howa hadak!");
 } sinn {
     golih("Machi howa hakda!");

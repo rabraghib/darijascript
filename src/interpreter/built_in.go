@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/rabraghib/darija-script/src/parser"
+	"github.com/rabraghib/darijascript/src/parser"
 )
 
 func (eval *Evaluator) evaluateBuiltinFunctionCall(callExpression *parser.CallExpression) (interface{}, error) {

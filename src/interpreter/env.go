@@ -1,6 +1,6 @@
 package interpreter
 
-import "github.com/rabraghib/darija-script/src/parser"
+import "github.com/rabraghib/darijascript/src/parser"
 
 type Environment struct {
 	store     map[string]interface{}

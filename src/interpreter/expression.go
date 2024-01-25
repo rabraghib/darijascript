@@ -3,7 +3,7 @@ package interpreter
 import (
 	"fmt"
 
-	"github.com/rabraghib/darija-script/src/parser"
+	"github.com/rabraghib/darijascript/src/parser"
 )
 
 func (eval *Evaluator) evaluateExpression(expression parser.Expression) (interface{}, error) {
@@ -80,23 +80,17 @@ func (eval *Evaluator) evaluatePrefixExpression(operator string, rightValue inte
 func (eval *Evaluator) evaluateInfixExpression(operator string, leftValue interface{}, rightValue interface{}) (interface{}, error) {
 	switch operator {
 	case "+":
-		left, err := toInteger(leftValue)
-		if err != nil {
-			left, ok := leftValue.(string)
-			if !ok {
-				return nil, err
-			}
-			right, err := convertToString(rightValue)
-			if err != nil {
-				return nil, err
-			}
+		left, err1 := toInteger(leftValue)
+		right, err2 := toInteger(rightValue)
+		if err1 == nil && err2 == nil {
 			return left + right, nil
 		}
-		right, err := toInteger(rightValue)
-		if err != nil {
-			return nil, err
+		leftStr, err1 := convertToString(leftValue)
+		rightStr, err2 := convertToString(rightValue)
+		if err1 != nil || err2 != nil {
+			return nil, fmt.Errorf("unsupported infix operator: %s %s %s", leftValue, operator, rightValue)
 		}
-		return left + right, nil
+		return leftStr + rightStr, nil
 	case "-":
 		left, err := toInteger(leftValue)
 		if err != nil {

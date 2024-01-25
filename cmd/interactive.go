@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rabraghib/darija-script/src/interpreter"
+	"github.com/rabraghib/darijascript/src/interpreter"
 	"github.com/spf13/cobra"
 )
 

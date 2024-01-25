@@ -1,4 +1,4 @@
-module github.com/rabraghib/darija-script
+module github.com/rabraghib/darijascript
 
 go 1.20
 
