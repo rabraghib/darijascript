@@ -17,9 +17,8 @@ jobs:
       - uses: rabraghib/releaser-action@v1
         id: releaser
         with:
-          bump-files: |
-            language-service/package.json
-          output-file: docs/CHANGELOG.md
+          output-file: CHANGELOG.md
+          version-file: language-service/package.json
   build-deploy:
     if: needs.release-up.outputs.released == 'true'
     needs: release-up
