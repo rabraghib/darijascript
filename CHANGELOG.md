@@ -5,5 +5,8 @@
 
 * vscode extension for snippets, icons theme and syntax highlighting ([b56c846](https://github.com/rabraghib/darijascript/commit/b56c84637b78a7adce4f6a5afe68a531735d578e))
 
+* examples of DarijaScript code 
+
+* compiler for DarijaScript with a run & interactive mode 
 
 
