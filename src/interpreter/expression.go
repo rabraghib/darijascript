@@ -141,6 +141,16 @@ func (eval *Evaluator) evaluateInfixExpression(operator string, leftValue interf
 			return nil, err
 		}
 		return left < right, nil
+	case "<=":
+		left, err := toInteger(leftValue)
+		if err != nil {
+			return nil, err
+		}
+		right, err := toInteger(rightValue)
+		if err != nil {
+			return nil, err
+		}
+		return left <= right, nil
 	case ">":
 		left, err := toInteger(leftValue)
 		if err != nil {
@@ -151,6 +161,16 @@ func (eval *Evaluator) evaluateInfixExpression(operator string, leftValue interf
 			return nil, err
 		}
 		return left > right, nil
+	case ">=":
+		left, err := toInteger(leftValue)
+		if err != nil {
+			return nil, err
+		}
+		right, err := toInteger(rightValue)
+		if err != nil {
+			return nil, err
+		}
+		return left >= right, nil
 	case "==":
 		return leftValue == rightValue, nil
 	case "!=":
