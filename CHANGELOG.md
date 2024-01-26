@@ -1,3 +1,17 @@
+# [1.1.0](https://github.com/rabraghib/darijascript/compare/v1.0.0...v1.1.0) (2024-01-26)
+
+
+### Bug Fixes
+
+* ensure version is updated in package.json ([fecb6e3](https://github.com/rabraghib/darijascript/commit/fecb6e3e1975052c5b7af62bd72e5eb4e20a002f))
+
+
+### Features
+
+* support <= and >= operators ([dce3808](https://github.com/rabraghib/darijascript/commit/dce38087935448fac469710e1ec8e053232c773f))
+
+
+
 # [1.0.0](https://github.com/rabraghib/darijascript/compare/v0.1.0...v1.0.0) (2024-01-25)
 
 
