@@ -19,6 +19,8 @@ jobs:
         with:
           output-file: CHANGELOG.md
           version-file: language-service/package.json
+          bump-files: |
+            language-service/package.json
   build-deploy:
     if: needs.release-up.outputs.released == 'true'
     needs: release-up
