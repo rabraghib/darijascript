@@ -1,9 +1,13 @@
 package parser
 
-import "github.com/rabraghib/darijascript/src/lexer"
+import (
+	"fmt"
+
+	"github.com/rabraghib/darijascript/src/lexer"
+)
 
 type Parser struct {
-	errors []string
+	errors []Error
 	tokens []*lexer.Token
 	curPos int
 }
@@ -12,7 +16,18 @@ func NewParser(tokens []*lexer.Token) *Parser {
 	return &Parser{tokens: tokens, curPos: 0}
 }
 
-func (p *Parser) ParseProgram() *Program {
+func (p *Parser) errorsOrNil() error {
+	if len(p.errors) == 0 {
+		return nil
+	}
+	errorMsg := "Parser errors: "
+	for _, err := range p.errors {
+		errorMsg += fmt.Sprintf("\n\t%s at %d:%d", err.Message, err.Pos.Line, err.Pos.Column)
+	}
+	return fmt.Errorf(errorMsg)
+}
+
+func (p *Parser) ParseProgram() (*Program, error) {
 	program := &Program{}
 	program.Statements = []Statement{}
 
@@ -23,7 +38,7 @@ func (p *Parser) ParseProgram() *Program {
 		}
 	}
 
-	return program
+	return program, p.errorsOrNil()
 }
 
 func (p *Parser) isAtEnd() bool {
@@ -32,15 +47,6 @@ func (p *Parser) isAtEnd() bool {
 
 func (p *Parser) currentToken() *lexer.Token {
 	return p.tokens[p.curPos]
-}
-
-func (p *Parser) isExpressionEnded() bool {
-	if p.isAtEnd() {
-		return true
-	}
-	var currentToken = p.currentToken()
-	return currentToken.Type == lexer.TT_SEMICOLON ||
-		currentToken.Type == lexer.TT_RBRACE || currentToken.Type == lexer.TT_LBRACE
 }
 
 func (p *Parser) parseStatement() Statement {
@@ -68,21 +74,30 @@ func (p *Parser) parseStatement() Statement {
 	}
 }
 
-func (p *Parser) parseIfStatement(reversed bool) *IfStatement {
-	p.curPos++ // Skip if token
+func (p *Parser) parseIfStatement(isNegative bool) *IfStatement {
+	p.consumeToken() // consume TT_IF or TT_IF_NOT token
 	ifStatement := &IfStatement{}
-	ifStatement.IsConditionReversed = reversed
+	ifStatement.IsConditionReversed = isNegative
 	ifStatement.Condition = p.parseExpression()
 	ifStatement.Consequence = p.parseBlockStatement()
-	if !p.isAtEnd() && p.currentToken().Type == lexer.TT_ELSE {
-		p.curPos++ // Skip else token
-		ifStatement.Alternative = p.parseBlockStatement()
+	if p.matchToken(lexer.TT_ELSE) {
+		if p.checkToken(lexer.TT_IF) {
+			ifStatement.Alternative = &BlockStatement{
+				Statements: []Statement{p.parseIfStatement(false)},
+			}
+		} else if p.checkToken(lexer.TT_IF_NOT) {
+			ifStatement.Alternative = &BlockStatement{
+				Statements: []Statement{p.parseIfStatement(true)},
+			}
+		} else {
+			ifStatement.Alternative = p.parseBlockStatement()
+		}
 	}
 	return ifStatement
 }
 
 func (p *Parser) parseWhileStatement() *WhileStatement {
-	p.curPos++ // Skip while token
+	p.consumeToken() // consume TT_WHILE token
 	whileStatement := &WhileStatement{}
 	whileStatement.Condition = p.parseExpression()
 	whileStatement.Consequence = p.parseBlockStatement()
@@ -90,96 +105,114 @@ func (p *Parser) parseWhileStatement() *WhileStatement {
 }
 
 func (p *Parser) parseBlockStatement() *BlockStatement {
-	if p.currentToken().Type != lexer.TT_LBRACE {
-		p.errors = append(p.errors, "Expected { found "+p.currentToken().Literal+" instead")
-		return nil
-	}
-
+	p.consumeTokenOfType(lexer.TT_LBRACE)
 	blockStatement := &BlockStatement{}
 	blockStatement.Statements = []Statement{}
-
-	p.curPos++ // Skip {
-	for !p.isAtEnd() && p.currentToken().Type != lexer.TT_RBRACE {
+	for !p.checkToken(lexer.TT_RBRACE) && !p.isAtEnd() {
 		stmt := p.parseStatement()
 		if stmt != nil {
 			blockStatement.Statements = append(blockStatement.Statements, stmt)
 		}
 	}
-	p.curPos++ // Skip }
+	p.consumeTokenOfType(lexer.TT_RBRACE)
 	return blockStatement
 }
 
 func (p *Parser) parseExpressionStatement() *ExpressionStatement {
-	expressionStatement := &ExpressionStatement{}
-	expressionStatement.Expression = p.parseExpression()
-	if expressionStatement.Expression == nil {
-		return nil
+	expressionStatement := &ExpressionStatement{
+		Expression: p.parseExpression(),
 	}
+	p.consumeTokenOfType(lexer.TT_SEMICOLON)
 	return expressionStatement
 }
 
 func (p *Parser) parseFunctionDeclaration() *FunctionDeclaration {
 	functionDeclaration := &FunctionDeclaration{}
-	functionDeclaration.Parameters = []*Identifier{}
-	p.curPos++ // Skip function token
-	functionDeclaration.Name = p.currentToken().Literal
-	p.curPos++ // Skip function name
-	if p.currentToken().Type != lexer.TT_LPAREN {
-		p.errors = append(p.errors, "Expected ( after function name")
-		return nil
-	}
-	p.curPos++ // Skip (
-	for !p.isAtEnd() && p.currentToken().Type != lexer.TT_RPAREN {
-		if p.currentToken().Type != lexer.TT_IDENTIFIER {
-			p.errors = append(p.errors, "Expected identifier as function parameter")
-			return nil
-		}
-		functionDeclaration.Parameters = append(functionDeclaration.Parameters, &Identifier{
-			Value: p.currentToken().Literal,
-		})
-		p.curPos++ // Skip parameter name
-		if p.currentToken().Type == lexer.TT_COMMA {
-			p.curPos++ // Skip ,
-		} else if p.currentToken().Type != lexer.TT_RPAREN {
-			p.errors = append(p.errors, "Expected , or ) after function parameter")
-			return nil
-		}
-	}
-	p.curPos++ // Skip )
+	p.consumeToken() // consume TT_FUNCTION token
+	functionDeclaration.Name = p.parseIdentifier()
+	p.consumeTokenOfType(lexer.TT_LPAREN)
+	functionDeclaration.Parameters = p.parseFunctionParameters()
 	functionDeclaration.Body = p.parseBlockStatement()
 	return functionDeclaration
 }
 
 func (p *Parser) parseReturnStatement() *ReturnStatement {
-	p.curPos++ // Skip return token
+	p.consumeToken() // consume TT_RETURN token
 	returnStatement := &ReturnStatement{}
-	returnStatement.ReturnValue = p.parseExpression()
+	if !p.checkToken(lexer.TT_SEMICOLON) {
+		returnStatement.ReturnValue = p.parseExpression()
+	}
+	p.consumeTokenOfType(lexer.TT_SEMICOLON)
 	return returnStatement
 }
 
-func (p *Parser) parseThrowStatement() *ThrowStatement {
-	p.curPos++ // Skip throw token
+func (p *Parser) parseThrowStatement() Statement {
+	p.consumeToken() // consume TT_THROW token
 	throwStatement := &ThrowStatement{}
 	throwStatement.ReturnValue = p.parseExpression()
+	p.consumeTokenOfType(lexer.TT_SEMICOLON)
 	return throwStatement
 }
 
-func (p *Parser) parseLetStatement() *LetStatement {
-	p.curPos++ // Skip let token
-	if p.isAtEnd() || p.currentToken().Type != lexer.TT_IDENTIFIER {
-		p.errors = append(p.errors, "Expected identifier after 9ayed keyword")
+func (p *Parser) parseLetStatement() Statement {
+	p.consumeToken() // consume TT_LET token
+	name := p.parseIdentifier()
+	p.consumeTokenOfType(lexer.TT_ASSIGN)
+	value := p.parseExpression()
+	p.consumeTokenOfType(lexer.TT_SEMICOLON)
+	return &LetStatement{
+		Name:  name,
+		Value: value,
+	}
+}
+
+func (p *Parser) parseIdentifier() *Identifier {
+	token := p.consumeTokenOfType(lexer.TT_IDENTIFIER)
+	return &Identifier{
+		Value: token.Literal,
+		Token: token,
+	}
+}
+
+func (p *Parser) parseFunctionParameters() []*Identifier {
+	parameters := []*Identifier{}
+	if p.checkToken(lexer.TT_IDENTIFIER) {
+		parameters = append(parameters, p.parseIdentifier())
+		for p.matchToken(lexer.TT_COMMA) {
+			parameters = append(parameters, p.parseIdentifier())
+		}
+	}
+	p.consumeTokenOfType(lexer.TT_RPAREN)
+	return parameters
+}
+
+// Utility methods
+func (p *Parser) consumeToken() *lexer.Token {
+	token := p.currentToken()
+	p.curPos++
+	return token
+}
+
+func (p *Parser) consumeTokenOfType(tokenType lexer.TokenType) *lexer.Token {
+	token := p.consumeToken()
+	if token.Type != tokenType {
+		p.errors = append(p.errors, Error{
+			Message: fmt.Sprintf("Expected token of type %s, got %s", tokenType, token.Type),
+			Pos:     token.Pos,
+		})
 		return nil
 	}
-	letStatement := &LetStatement{}
-	letStatement.Name = &Identifier{
-		Value: p.currentToken().Literal,
+	return token
+}
+
+func (p *Parser) matchToken(tokenType lexer.TokenType) bool {
+	if p.checkToken(tokenType) {
+		p.consumeToken()
+		return true
 	}
-	p.curPos++ // Skip identifier
-	if p.isAtEnd() || p.currentToken().Type != lexer.TT_ASSIGN {
-		p.errors = append(p.errors, "Expected = after 9ayed statement")
-		return nil
-	}
-	p.curPos++ // Skip =
-	letStatement.Value = p.parseExpression()
-	return letStatement
+	return false
+}
+
+func (p *Parser) checkToken(tokenType lexer.TokenType) bool {
+	return !p.isAtEnd() && p.currentToken().Type == tokenType
 }

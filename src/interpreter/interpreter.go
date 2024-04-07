@@ -53,7 +53,7 @@ func (eval *Evaluator) evaluateStatement(statement parser.Statement) (interface{
 		_, err := eval.evaluateExpression(stmt.Expression)
 		return nil, err
 	case *parser.FunctionDeclaration:
-		eval.env.SetFunction(stmt.Name, stmt)
+		eval.env.SetFunction(stmt.Name.Value, stmt)
 		return nil, nil
 	case *parser.IfStatement:
 		condition, err := eval.evaluateBoolExpression(stmt.Condition)
@@ -113,8 +113,7 @@ func (eval *Evaluator) evaluateLetStatement(stmt *parser.LetStatement) error {
 	if err != nil {
 		return err
 	}
-	eval.env.Set(stmt.Name.Value, val)
-	return nil
+	return eval.env.Set(stmt.Name.Value, val)
 }
 
 func (eval *Evaluator) evaluateBlockStatement(block *parser.BlockStatement) (interface{}, error) {
@@ -125,7 +124,10 @@ func (eval *Evaluator) evaluateBlockStatementExtended(block *parser.BlockStateme
 	blockEnv := NewEnclosedEnvironment(eval.env)
 	eval.env = blockEnv
 	for k, v := range extraParams {
-		eval.env.Set(k, v)
+		err := eval.env.Set(k, v)
+		if err != nil {
+			return nil, err
+		}
 	}
 	val, err := eval.EvaluateStatements(block.Statements)
 	eval.env = eval.env.outer

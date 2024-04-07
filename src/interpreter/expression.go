@@ -2,11 +2,15 @@ package interpreter
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/rabraghib/darijascript/src/parser"
 )
 
 func (eval *Evaluator) evaluateExpression(expression parser.Expression) (interface{}, error) {
+	if expression == nil {
+		return nil, nil
+	}
 	switch expr := expression.(type) {
 	case *parser.Identifier:
 		val, ok := eval.env.Get(expr.Value)
@@ -14,7 +18,7 @@ func (eval *Evaluator) evaluateExpression(expression parser.Expression) (interfa
 			return nil, fmt.Errorf("identifier not found: %s", expr.Value)
 		}
 		return val, nil
-	case *parser.IntegerLiteral:
+	case *parser.NumberLiteral:
 		return expr.Value, nil
 	case *parser.StringLiteral:
 		return expr.Value, nil
@@ -67,7 +71,7 @@ func (eval *Evaluator) evaluatePrefixExpression(operator string, rightValue inte
 		}
 		return !value, nil
 	case "-":
-		value, err := toInteger(rightValue)
+		value, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
@@ -80,8 +84,8 @@ func (eval *Evaluator) evaluatePrefixExpression(operator string, rightValue inte
 func (eval *Evaluator) evaluateInfixExpression(operator string, leftValue interface{}, rightValue interface{}) (interface{}, error) {
 	switch operator {
 	case "+":
-		left, err1 := toInteger(leftValue)
-		right, err2 := toInteger(rightValue)
+		left, err1 := toNumber(leftValue)
+		right, err2 := toNumber(rightValue)
 		if err1 == nil && err2 == nil {
 			return left + right, nil
 		}
@@ -92,81 +96,83 @@ func (eval *Evaluator) evaluateInfixExpression(operator string, leftValue interf
 		}
 		return leftStr + rightStr, nil
 	case "-":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
 		return left - right, nil
 	case "*":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
 		return left * right, nil
 	case "/":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
 		return left / right, nil
 	case "%":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
-		return left % right, nil
+		leftInt := int64(left)
+		rightInt := int64(right)
+		return float64(leftInt % rightInt), nil
 	case "<":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
 		return left < right, nil
 	case "<=":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
 		return left <= right, nil
 	case ">":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
 		return left > right, nil
 	case ">=":
-		left, err := toInteger(leftValue)
+		left, err := toNumber(leftValue)
 		if err != nil {
 			return nil, err
 		}
-		right, err := toInteger(rightValue)
+		right, err := toNumber(rightValue)
 		if err != nil {
 			return nil, err
 		}
@@ -201,7 +207,10 @@ func (eval *Evaluator) evaluateInfixExpression(operator string, leftValue interf
 }
 
 func (eval *Evaluator) evaluateCallExpression(callExpression *parser.CallExpression) (interface{}, error) {
-	function, ok := eval.env.GetFunction(callExpression.Function.Value)
+	function, ok, err := eval.env.GetFunction(callExpression.Function.Value)
+	if err != nil {
+		return nil, err
+	}
 	if !ok {
 		return eval.evaluateBuiltinFunctionCall(callExpression)
 	}
@@ -229,11 +238,15 @@ func toBool(value interface{}) (bool, error) {
 	}
 }
 
-func toInteger(value interface{}) (int64, error) {
+func toNumber(value interface{}) (float64, error) {
 	switch v := value.(type) {
-	case int64:
+	case int64, int32, int16, int8, int:
+		return float64(v.(int64)), nil
+	case float64:
 		return v, nil
+	case string:
+		return strconv.ParseFloat(v, 64)
 	default:
-		return 0, fmt.Errorf("unsupported type for integer conversion: %T", value)
+		return 0, fmt.Errorf("unsupported type for number conversion: %T", value)
 	}
 }

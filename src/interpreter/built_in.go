@@ -9,6 +9,22 @@ import (
 
 func (eval *Evaluator) evaluateBuiltinFunctionCall(callExpression *parser.CallExpression) (interface{}, error) {
 	switch callExpression.Function.Value {
+	case "abs":
+		if len(callExpression.Arguments) != 1 {
+			return nil, fmt.Errorf("abs() takes exactly 1 argument, %d given", len(callExpression.Arguments))
+		}
+		arg, err := eval.evaluateExpression(callExpression.Arguments[0])
+		if err != nil {
+			return nil, err
+		}
+		num, err := convertToInt64(arg)
+		if err != nil {
+			return nil, err
+		}
+		if num < 0 {
+			return -num, nil
+		}
+		return num, nil
 	case "golih":
 		if len(callExpression.Arguments) != 1 {
 			return nil, fmt.Errorf("golih() takes exactly 1 argument, %d given", len(callExpression.Arguments))
@@ -35,7 +51,11 @@ func (eval *Evaluator) evaluateBuiltinFunctionCall(callExpression *parser.CallEx
 		return input, nil
 	case "rdo3adad", "rdoBooleen", "rdoString":
 		if len(callExpression.Arguments) != 1 {
-			return nil, fmt.Errorf("rdo3adad() takes exactly 1 argument, %d given", len(callExpression.Arguments))
+			return nil, fmt.Errorf(
+				"%s() takes exactly 1 argument, %d given",
+				callExpression.Function.Value,
+				len(callExpression.Arguments),
+			)
 		}
 		arg, err := eval.evaluateExpression(callExpression.Arguments[0])
 		if err != nil {
@@ -53,9 +73,9 @@ func (eval *Evaluator) evaluateBuiltinFunctionCall(callExpression *parser.CallEx
 	}
 }
 
-func convertToInt64(value interface{}) (int64, error) {
+func convertToInt64(value interface{}) (float64, error) {
 	switch v := value.(type) {
-	case int64:
+	case float64:
 		return v, nil
 	case bool:
 		if v {
@@ -63,7 +83,7 @@ func convertToInt64(value interface{}) (int64, error) {
 		}
 		return 0, nil
 	case string:
-		return strconv.ParseInt(v, 10, 64)
+		return strconv.ParseFloat(v, 64)
 	default:
 		return 0, fmt.Errorf("unsupported type for integer conversion: %T", value)
 	}
@@ -73,7 +93,7 @@ func convertToBool(value interface{}) (bool, error) {
 	switch v := value.(type) {
 	case bool:
 		return v, nil
-	case int64:
+	case float64:
 		return v != 0, nil
 	case string:
 		if v == "s7i7" || v == "S7I7" {
@@ -95,8 +115,8 @@ func convertToString(value interface{}) (string, error) {
 			return "s7i7", nil
 		}
 		return "ghalt", nil
-	case int64:
-		return fmt.Sprintf("%d", v), nil
+	case float64:
+		return fmt.Sprintf("%f", v), nil
 	case string:
 		return v, nil
 	default:

@@ -1,0 +1,54 @@
+golih("Calculating the integral of a function using different methods:");
+golih("f(x) = x^2");
+golih("a = 0, b = 1");
+golih("n = 1000");
+golih("");
+golih("Rectangles method: " + methodRectangles(0, 1, 1000));
+golih("Trapezes method: " + methodTrapezes(0, 1, 1000));
+golih("Simpson method: " + methodSimpson(0, 1, 1000));
+
+fonksyon f(x) {
+  rjje3 (x*x);
+}
+
+fonksyon methodRectangles(a, b, n) {
+  9ayed h = (b-a)/n;
+  9ayed sum = 0;
+  9ayed i = 0;
+  ma7dBa9i(i < n) {
+    9ayed xi = a + (i*h);
+    sum = sum + (f(xi));
+    i = i + 1;
+  }
+  rjje3 (sum*h);
+}
+
+fonksyon methodTrapezes(a, b, n) {
+  9ayed h = (b-a)/n;
+  9ayed sum = (f(a) + f(b))/2;
+  9ayed i = 1;
+  ma7dBa9i(i < n) {
+    9ayed xi = a + (i*h);
+    sum = sum + f(xi);
+    i = i + 1;
+  }
+  rjje3 (sum*h);
+}
+
+fonksyon methodSimpson(a, b, n) {
+  9ayed h = (b-a)/n;
+  9ayed sum = f(a) + f(b);
+  9ayed i = 1;
+  ma7dBa9i(i < n) {
+    9ayed xi = a + (i*h);
+    sum = sum + 2*f(xi);
+    i = i + 1;
+  }
+  i = 0;
+  ma7dBa9i(i < n) {
+    9ayed xi = a + ((i+1/2)*h);
+    sum = sum + 4*f(xi);
+    i = i + 1;
+  }
+  rjje3 (sum*h/6);
+}

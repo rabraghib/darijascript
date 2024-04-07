@@ -40,7 +40,7 @@ fonksyon jma(x, y) {
 }
 
 9ayed total = jma(3, 4);
-golih(total);
+golih("Total = " + total);
 
 # Comments
 # Hadshi comment wahd

@@ -1,4 +1,5 @@
 9ayed name = dakhel("Chno smiytek? ");
 9ayed birthYear = rdo3adad(dakhel("Ina 3am tzaditi a " + name + "? "));
 
+golih("");
 golih("Smiytek " + name + " w 3omrek " + (2024-birthYear) + " sana");

@@ -1,6 +1,10 @@
 package interpreter
 
-import "github.com/rabraghib/darijascript/src/parser"
+import (
+	"fmt"
+
+	"github.com/rabraghib/darijascript/src/parser"
+)
 
 type Environment struct {
 	store     map[string]interface{}
@@ -24,14 +28,25 @@ func NewEnclosedEnvironment(outer *Environment) *Environment {
 
 func (env *Environment) Get(name string) (interface{}, bool) {
 	val, ok := env.store[name]
-	if !ok && env.outer != nil {
-		return env.outer.Get(name)
+	if !ok {
+		fn, ok := env.functions[name]
+		if ok {
+			return fn, ok
+		}
+		if env.outer != nil {
+			return env.outer.Get(name)
+		}
 	}
 	return val, ok
 }
 
-func (env *Environment) Set(name string, value interface{}) {
+func (env *Environment) Set(name string, value interface{}) error {
+	_, ok := env.Get(name)
+	if ok {
+		return fmt.Errorf("id %s already declared", name)
+	}
 	env.store[name] = value
+	return nil
 }
 
 func (env *Environment) Update(name string, value interface{}) {
@@ -42,12 +57,16 @@ func (env *Environment) Update(name string, value interface{}) {
 	}
 }
 
-func (env *Environment) GetFunction(name string) (*parser.FunctionDeclaration, bool) {
-	fn, ok := env.functions[name]
-	if !ok && env.outer != nil {
-		return env.outer.GetFunction(name)
+func (env *Environment) GetFunction(name string) (*parser.FunctionDeclaration, bool, error) {
+	fnRaw, ok := env.Get(name)
+	if ok {
+		fn, ok := fnRaw.(*parser.FunctionDeclaration)
+		if !ok {
+			return nil, false, fmt.Errorf("identifier %s is not a function", name)
+		}
+		return fn, ok, nil
 	}
-	return fn, ok
+	return nil, ok, nil
 }
 
 func (env *Environment) SetFunction(name string, fn *parser.FunctionDeclaration) {

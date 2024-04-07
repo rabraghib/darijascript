@@ -40,7 +40,7 @@ func (l *Lexer) IsEOL() bool {
 
 func (l *Lexer) NextToken() (*Token, error) {
 	l.skipWhitespace()
-	var position = Position{"TODO: check this", l.line, l.column}
+	var position = Position{l.line, l.column}
 
 	if l.ch == '#' || (l.ch == '/' && l.peekChar() == '/') {
 		if l.ch == '/' {

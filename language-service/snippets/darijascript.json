@@ -49,5 +49,25 @@
     "prefix": "dakhel",
     "body": ["9ayed ${1:myVariable} = dakhel(\"${2:Enter input}\");"],
     "description": "Creates a new input statement"
+  },
+  "Input Function": {
+    "prefix": "dakhel",
+    "body": ["dakhel(\"${1:Enter input}\");"],
+    "description": "Creates a new input function"
+  },
+  "Convert to String (rdoString)": {
+    "prefix": "rdoString",
+    "body": ["rdoString(${1:myVariable});"],
+    "description": "Converts 'myVariable' to a string"
+  },
+  "Convert to Integer (rdo3adad)": {
+    "prefix": "rdo3adad",
+    "body": ["rdo3adad(${1:myVariable});"],
+    "description": "Converts 'myVariable' to an integer"
+  },
+  "Convert to Boolean (rdoBooleen)": {
+    "prefix": "rdoBooleen",
+    "body": ["rdoBooleen(${1:myVariable});"],
+    "description": "Converts 'myVariable' to a boolean"
   }
 }

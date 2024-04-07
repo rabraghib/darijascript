@@ -43,8 +43,12 @@ func runCode(sourceCode string, eval *interpreter.Evaluator) {
 		tokens = append(tokens, token)
 	}
 	p := parser.NewParser(tokens)
-	program := p.ParseProgram()
-	_, err := eval.EvaluateProgram(program)
+	program, err := p.ParseProgram()
+	if err != nil {
+		fmt.Println("Error: ", err)
+		os.Exit(1)
+	}
+	_, err = eval.EvaluateProgram(program)
 	if err != nil {
 		fmt.Println("Error: ", err)
 		os.Exit(1)
