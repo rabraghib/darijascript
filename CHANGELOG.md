@@ -1,3 +1,13 @@
+# [1.2.0](https://github.com/rabraghib/darijascript/compare/v1.1.0...v1.2.0) (2024-04-08)
+
+
+### Features
+
+* :sparkles: more examples & improve parsing ([c711103](https://github.com/rabraghib/darijascript/commit/c7111036d00b3740f938c8cf0bd784b1301276d3))
+* create DarijaScript website ([5be2b59](https://github.com/rabraghib/darijascript/commit/5be2b59e92b6e11ada1dd20f6082f8f8eefad68d))
+
+
+
 # [1.1.0](https://github.com/rabraghib/darijascript/compare/v1.0.0...v1.1.0) (2024-01-26)
 
 
