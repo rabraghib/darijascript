@@ -1,3 +1,12 @@
+## [1.3.4](https://github.com/rabraghib/darijascript/compare/v1.3.3...v1.3.4) (2024-04-10)
+
+
+### Bug Fixes
+
+* hopefully it will work now ([6d565ca](https://github.com/rabraghib/darijascript/commit/6d565ca68d3e791a25c44c64e1c095b3c7595072))
+
+
+
 ## [1.3.3](https://github.com/rabraghib/darijascript/compare/v1.3.2...v1.3.3) (2024-04-10)
 
 
