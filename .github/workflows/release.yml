@@ -38,8 +38,10 @@ jobs:
       - name: Build for Windows, Linux, and macOS
         run: |
           GOOS=linux GOARCH=amd64 go build -buildvcs=false -o bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-linux .
+          cp bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-linux bin/darijascript-bin
           GOOS=windows GOARCH=amd64 go build -buildvcs=false -o bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-windows.exe .
           GOOS=darwin GOARCH=amd64 go build -buildvcs=false -o bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-macos .
+          GOOS=js GOARCH=wasm go build -buildvcs=false -o bin/darijascript-bin-${{ needs.release-up.outputs.tag }}-web.wasm .
       - name: Build vscode extension
         run: |
           npm install -g @vscode/vsce
