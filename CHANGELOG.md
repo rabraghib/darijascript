@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/rabraghib/darijascript/compare/v1.3.16...v1.4.0) (2024-04-10)
+
+
+### Features
+
+* improve SEO & social media sharing ([44ad556](https://github.com/rabraghib/darijascript/commit/44ad556ac8e4ed029a3aa4046cd50616d2ccc89d))
+
+
+
 ## [1.3.16](https://github.com/rabraghib/darijascript/compare/v1.3.15...v1.3.16) (2024-04-10)
 
 
