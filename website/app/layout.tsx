@@ -8,6 +8,34 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'DarijaScript Programming Language',
   description: 'The greatest language that ever was or will be!',
+  openGraph: {
+    type: 'website',
+    url: 'https://darijascript.rabraghib.me',
+    title: 'DarijaScript Programming Language',
+    description: 'The greatest language that ever was or will be!',
+    images: [
+      {
+        url: 'https://darijascript.rabraghib.me/meme.webp',
+        width: 1280,
+        height: 720,
+        alt: 'DarijaScript Programming Language',
+      },
+    ],
+  },
+  twitter: {
+    site: '@rabraghib',
+    card: 'summary',
+    title: 'DarijaScript Programming Language',
+    description: 'The greatest language that ever was or will be!',
+    images: [
+      {
+        url: 'https://darijascript.rabraghib.me/meme.webp',
+        width: 1280,
+        height: 720,
+        alt: 'DarijaScript Programming Language',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
