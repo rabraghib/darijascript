@@ -1,3 +1,12 @@
+## [1.3.9](https://github.com/rabraghib/darijascript/compare/v1.3.8...v1.3.9) (2024-04-10)
+
+
+### Bug Fixes
+
+* 🐛 deployments problems (hopefully) ([282378d](https://github.com/rabraghib/darijascript/commit/282378dfb645fc1fb25f859a2105838f51d35ee5))
+
+
+
 ## [1.3.8](https://github.com/rabraghib/darijascript/compare/v1.3.7...v1.3.8) (2024-04-10)
 
 
