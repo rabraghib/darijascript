@@ -6,6 +6,11 @@ import Playground from './playground';
 import { githubDark } from '@uiw/codemirror-theme-github';
 import DarijaScript, { FontSizeThemeExtension } from './codemirror/codemirror';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const DynamicPlaygroundWithNoSSR = dynamic(() => import('./playground'), {
+  ssr: false,
+});
 
 export default function PlaygroundManager({
   examples,
@@ -20,7 +25,7 @@ export default function PlaygroundManager({
 
   if (selectedExample !== null) {
     return (
-      <Playground
+      <DynamicPlaygroundWithNoSSR
         examples={examples}
         selectedIndex={selectedExample}
         onClose={() => setSelectedExample(null)}
