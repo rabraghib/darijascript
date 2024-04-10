@@ -1,3 +1,12 @@
+## [1.3.2](https://github.com/rabraghib/darijascript/compare/v1.3.1...v1.3.2) (2024-04-10)
+
+
+### Bug Fixes
+
+* fix build error ([f4be172](https://github.com/rabraghib/darijascript/commit/f4be172e0ff31a6136a89c7657d1576490734b6d))
+
+
+
 ## [1.3.1](https://github.com/rabraghib/darijascript/compare/v1.3.0...v1.3.1) (2024-04-10)
 
 
