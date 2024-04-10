@@ -1,3 +1,12 @@
+## [1.3.3](https://github.com/rabraghib/darijascript/compare/v1.3.2...v1.3.3) (2024-04-10)
+
+
+### Bug Fixes
+
+* :bug: disable SSR for playground ([7151a3c](https://github.com/rabraghib/darijascript/commit/7151a3c4c55fcf1a8225ead7efe0e645b91052f3))
+
+
+
 ## [1.3.2](https://github.com/rabraghib/darijascript/compare/v1.3.1...v1.3.2) (2024-04-10)
 
 
