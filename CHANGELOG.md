@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/rabraghib/darijascript/compare/v1.2.0...v1.3.0) (2024-04-10)
+
+
+### Features
+
+* :rocket: improve website and add playground ([076e84b](https://github.com/rabraghib/darijascript/commit/076e84b883fae634e40738b2c045ca1aabde2117))
+
+
+
 # [1.2.0](https://github.com/rabraghib/darijascript/compare/v1.1.0...v1.2.0) (2024-04-08)
 
 
