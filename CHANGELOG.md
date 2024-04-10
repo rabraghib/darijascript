@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/rabraghib/darijascript/compare/v1.3.0...v1.3.1) (2024-04-10)
+
+
+### Bug Fixes
+
+* vercel permission error ([0e04ba1](https://github.com/rabraghib/darijascript/commit/0e04ba120646d4c3f1904bdc954467470be3adf9))
+
+
+
 # [1.3.0](https://github.com/rabraghib/darijascript/compare/v1.2.0...v1.3.0) (2024-04-10)
 
 
