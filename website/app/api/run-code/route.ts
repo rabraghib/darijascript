@@ -12,7 +12,21 @@ export async function POST(req: Request) {
       output: 'Error: Cannot run code with dakhel call',
     });
   }
+  await setupDarijaScript();
   return Response.json(await runCodeWithInput(code));
+}
+
+async function setupDarijaScript() {
+  try {
+    const { stderr } = await execute('darijascript --version');
+    if (stderr) {
+      throw new Error(stderr);
+    }
+  } catch (error) {
+    await execute(
+      'wget https://github.com/rabraghib/darijascript/releases/latest/download/darijascript-bin -O /usr/local/bin/darijascript && chmod +x /usr/local/bin/darijascript'
+    );
+  }
 }
 
 async function runCodeWithInput(code: string) {
