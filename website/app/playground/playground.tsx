@@ -48,10 +48,12 @@ export default function PlaygroundPage({
     terminal.clear();
     terminal.writeln('\x1b[32m$ darijascript run code.ds\x1b[0m');
     terminal.write('Running code...');
-    const response = await fetch('/api/run-code', {
+    const response = await fetch('https://api.ensamien.com/run-darijascript', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key':
+          'd7ZlYb9xMSRCiYoimAlwIxfC0eXhqy0xe9yoF8QAupKU5l9OdRTKqYsOVA20GfKT',
       },
       body: JSON.stringify({
         code,
