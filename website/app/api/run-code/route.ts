@@ -2,6 +2,7 @@ import { promisify } from 'util';
 import { writeFile } from 'fs/promises';
 import { exec } from 'child_process';
 import { temporaryFile } from 'tempy';
+import { createWriteStream } from 'fs';
 
 const execute = promisify(exec);
 
@@ -23,9 +24,22 @@ async function setupDarijaScript() {
       throw new Error(stderr);
     }
   } catch (error) {
-    await execute(
-      'wget https://github.com/rabraghib/darijascript/releases/latest/download/darijascript-bin -O /usr/local/bin/darijascript && chmod +x /usr/local/bin/darijascript'
+    const res = await fetch(
+      'https://github.com/rabraghib/darijascript/releases/latest/download/darijascript-bin'
     );
+    const outFile = createWriteStream('/usr/local/bin/darijascript');
+    res.body?.pipeTo(
+      new WritableStream({
+        write(chunk) {
+          outFile.write(chunk);
+        },
+        close() {
+          outFile.close();
+        },
+      })
+    );
+    // await writeFile('/usr/local/bin/darijascript', bin);
+    await execute('chmod +x /usr/local/bin/darijascript');
   }
 }
 
