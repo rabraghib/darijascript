@@ -3,7 +3,6 @@
 import { ICodingExample } from './examples';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 import Playground from './playground';
-import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
 import { githubDark } from '@uiw/codemirror-theme-github';
 import DarijaScript, { FontSizeThemeExtension } from './codemirror/codemirror';
 import { useEffect, useState } from 'react';
