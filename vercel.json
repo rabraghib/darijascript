@@ -1,0 +1,3 @@
+{
+  "installCommand": "cd website && chmod +x ./install.sh && ./install.sh && npm install"
+}

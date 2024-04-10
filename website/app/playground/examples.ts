@@ -8,7 +8,7 @@ export interface ICodingExample {
   code: string;
 }
 
-const rootPath = path.join(__dirname, '..', '..', '..');
+const rootPath = path.join(__dirname, '..', '..', '..', '..', '..');
 
 const examples = [
   {
@@ -30,18 +30,13 @@ const examples = [
 ];
 
 export async function getExamples(): Promise<ICodingExample[]> {
-  try {
-    return await Promise.all(
-      examples.map(async (example) => {
-        const codeBuffer = await readFile(example.codePath);
-        return {
-          name: example.name,
-          code: codeBuffer.toString(),
-        };
-      })
-    );
-  } catch (err) {
-    console.log('__dirname: ' + __dirname);
-    throw err;
-  }
+  return await Promise.all(
+    examples.map(async (example) => {
+      const codeBuffer = await readFile(example.codePath);
+      return {
+        name: example.name,
+        code: codeBuffer.toString(),
+      };
+    })
+  );
 }
