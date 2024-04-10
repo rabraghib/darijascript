@@ -8,7 +8,7 @@ export interface ICodingExample {
   code: string;
 }
 
-const rootPath = path.join(__dirname, '..', '..', '..', '..', '..');
+const rootPath = path.join(__dirname, '..', '..', '..', '..');
 
 const examples = [
   {

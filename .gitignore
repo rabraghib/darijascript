@@ -29,3 +29,5 @@ tmp/
 *.vsix
 
 .vercel
+
+website/examples/

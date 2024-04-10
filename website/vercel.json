@@ -1,0 +1,3 @@
+{
+  "installCommand": "chmod +x ./install.sh && ./install.sh && npm install"
+}
