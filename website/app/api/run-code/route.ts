@@ -19,7 +19,7 @@ export async function POST(req: Request) {
 
 async function setupDarijaScript() {
   try {
-    const { stderr } = await execute('darijascript --version');
+    const { stderr } = await execute('./darijascript --version');
     if (stderr) {
       throw new Error(stderr);
     }
@@ -27,7 +27,7 @@ async function setupDarijaScript() {
     const res = await fetch(
       'https://github.com/rabraghib/darijascript/releases/latest/download/darijascript-bin'
     );
-    const outFile = createWriteStream('/usr/local/bin/darijascript');
+    const outFile = createWriteStream('./darijascript');
     res.body?.pipeTo(
       new WritableStream({
         write(chunk) {
@@ -38,8 +38,7 @@ async function setupDarijaScript() {
         },
       })
     );
-    // await writeFile('/usr/local/bin/darijascript', bin);
-    await execute('chmod +x /usr/local/bin/darijascript');
+    await execute('chmod +x ./darijascript');
   }
 }
 
