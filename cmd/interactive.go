@@ -34,7 +34,7 @@ You can type DarijaScript code and it will be evaluated immediately.`,
 				break
 			}
 			if sourceCode != "" {
-				runCode(sourceCode, eval)
+				RunCode(sourceCode, eval)
 			}
 			fmt.Print(">>> ")
 		}

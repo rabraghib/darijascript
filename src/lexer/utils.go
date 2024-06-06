@@ -22,7 +22,11 @@ func (l *Lexer) readChar() {
 
 func (l *Lexer) readNumber() string {
 	position := l.position
-	for unicode.IsDigit(l.ch) {
+	usedDot := false
+	for isDigit(l.ch) || (l.ch == '.' && !usedDot) {
+		if l.ch == '.' {
+			usedDot = true
+		}
 		l.readChar()
 	}
 	return l.input[position:l.position]

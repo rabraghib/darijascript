@@ -2,13 +2,29 @@ package interpreter
 
 import (
 	"fmt"
+	"runtime"
 	"strconv"
+	"time"
 
 	"github.com/rabraghib/darijascript/src/parser"
 )
 
 func (eval *Evaluator) evaluateBuiltinFunctionCall(callExpression *parser.CallExpression) (interface{}, error) {
 	switch callExpression.Function.Value {
+	case "n3ess":
+		if len(callExpression.Arguments) != 1 {
+			return nil, fmt.Errorf("n3ess() takes exactly 1 argument, %d given", len(callExpression.Arguments))
+		}
+		arg, err := eval.evaluateExpression(callExpression.Arguments[0])
+		if err != nil {
+			return nil, err
+		}
+		num, err := convertToInt64(arg)
+		if err != nil {
+			return nil, err
+		}
+		time.Sleep(time.Duration(num) * time.Millisecond)
+		return nil, nil
 	case "abs":
 		if len(callExpression.Arguments) != 1 {
 			return nil, fmt.Errorf("abs() takes exactly 1 argument, %d given", len(callExpression.Arguments))
@@ -34,8 +50,11 @@ func (eval *Evaluator) evaluateBuiltinFunctionCall(callExpression *parser.CallEx
 			return nil, err
 		}
 		fmt.Println(arg)
-		return fmt.Sprintf("%d", arg), nil
+		return nil, nil
 	case "dakhel":
+		if runtime.GOOS == "js" {
+			return nil, fmt.Errorf("dakhel() is not supported in the browser")
+		}
 		if len(callExpression.Arguments) > 1 {
 			return nil, fmt.Errorf("dakhel() takes at most 1 argument, %d given", len(callExpression.Arguments))
 		}
@@ -116,7 +135,7 @@ func convertToString(value interface{}) (string, error) {
 		}
 		return "ghalt", nil
 	case float64:
-		return fmt.Sprintf("%f", v), nil
+		return strconv.FormatFloat(v, 'f', -1, 64), nil
 	case string:
 		return v, nil
 	default:

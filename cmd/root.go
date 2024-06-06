@@ -31,7 +31,7 @@ func Execute() {
 func init() {
 }
 
-func runCode(sourceCode string, eval *interpreter.Evaluator) {
+func RunCode(sourceCode string, eval *interpreter.Evaluator) {
 	l := lexer.NewLexer(string(sourceCode))
 	tokens := []*lexer.Token{}
 	for !l.IsEOL() {

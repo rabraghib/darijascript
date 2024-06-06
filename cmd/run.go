@@ -26,7 +26,7 @@ darijascript run my_program.ds`,
 			os.Exit(1)
 		}
 		eval := interpreter.NewEvaluator()
-		runCode(string(sourceCode), eval)
+		RunCode(string(sourceCode), eval)
 	},
 }
 

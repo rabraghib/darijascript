@@ -1,6 +1,6 @@
 'use client';
 
-import CodeMirror from '@uiw/react-codemirror';
+import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Terminal } from '@xterm/xterm';
 
@@ -9,6 +9,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import DarijaScript, { FontSizeThemeExtension } from './codemirror/codemirror';
 import { ICodingExample } from './examples';
 import { githubDark } from '@uiw/codemirror-theme-github';
+import { LoadWasm } from '../LoadWasm';
 
 export default function PlaygroundPage({
   examples,
@@ -47,49 +48,42 @@ export default function PlaygroundPage({
   async function runCode() {
     terminal.clear();
     terminal.writeln('\x1b[32m$ darijascript run code.ds\x1b[0m');
-    terminal.write('Running code...');
-    const response = await fetch('https://api.ensamien.com/run-darijascript', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key':
-          'd7ZlYb9xMSRCiYoimAlwIxfC0eXhqy0xe9yoF8QAupKU5l9OdRTKqYsOVA20GfKT',
-      },
-      body: JSON.stringify({
-        code,
-      }),
-    });
-    const { output } = await response.json();
-    terminal.write('\x1b[2K\r');
-    terminal.writeln(`${output}`);
+    window.runDarijaScript(code);
   }
 
   return (
-    <div className="h-full w-full grid grid-cols-2">
-      <div className="w-full h-full border-r border-slate-500">
-        <PlaygroundSection
-          title={
-            <CodeEditorTitle
-              examples={examples}
-              selectedIndex={selectedIndex}
-              onClose={onClose}
-              onSelectedIndexChange={onSelectedIndexChange}
+    <LoadWasm
+      writeOutput={(output: string) => {
+        terminal.write(output);
+        terminal.refresh(0, terminal.buffer.active.cursorY);
+      }}
+    >
+      <div className="h-[calc(100vh-4rem)] w-full grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
+        <div className="w-full h-full border-r border-slate-500">
+          <PlaygroundSection
+            title={
+              <CodeEditorTitle
+                examples={examples}
+                selectedIndex={selectedIndex}
+                onClose={onClose}
+                onSelectedIndexChange={onSelectedIndexChange}
+              />
+            }
+            actions={<CodeEditorActions onRun={runCode} />}
+          >
+            <AppCodeEditor
+              value={code}
+              onChange={(value) => {
+                setCode(value);
+              }}
             />
-          }
-          actions={<CodeEditorActions onRun={runCode} />}
-        >
-          <AppCodeEditor
-            value={code}
-            onChange={(value) => {
-              setCode(value);
-            }}
-          />
+          </PlaygroundSection>
+        </div>
+        <PlaygroundSection title={<>Terminal</>}>
+          <div className="h-full bg-black w-full" ref={terminalRef}></div>
         </PlaygroundSection>
       </div>
-      <PlaygroundSection title={<>Terminal</>}>
-        <div className="h-full bg-black w-full" ref={terminalRef}></div>
-      </PlaygroundSection>
-    </div>
+    </LoadWasm>
   );
 }
 
@@ -177,7 +171,11 @@ function AppCodeEditor({
         onChange(value);
       }}
       data-enable-grammarly="false"
-      extensions={[DarijaScript(), FontSizeThemeExtension]}
+      extensions={[
+        DarijaScript(),
+        FontSizeThemeExtension,
+        EditorView.lineWrapping,
+      ]}
     />
   );
 }

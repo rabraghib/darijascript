@@ -2,7 +2,7 @@ fonksyon f(x) { rjje3 x*x-7; }
 fonksyon df(x) { rjje3 2*x; }
 fonksyon g(x) { rjje3 (3*x+7/x)/4; }
 
-9ayed acceptableErr = 1/10000;
+9ayed acceptableErr = 0.0001;
 
 golih("Calculating the root of f(x) = x^3 - 2x - 5 using different methods:");
 golih("1. Dicotomic method: " + dicothomy(2, 3, acceptableErr));

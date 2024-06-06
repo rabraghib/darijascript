@@ -1,7 +1,9 @@
 package main
 
-import "github.com/rabraghib/darijascript/cmd"
+import (
+	"github.com/rabraghib/darijascript/src/entrypoint"
+)
 
 func main() {
-	cmd.Execute()
+	entrypoint.Entrypoint()
 }
