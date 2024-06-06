@@ -1,3 +1,12 @@
+## [1.6.1](https://github.com/rabraghib/darijascript/compare/v1.6.0...v1.6.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* disable auto deploy on vercel ([aaa74eb](https://github.com/rabraghib/darijascript/commit/aaa74ebd2adf57aa4ee74fd1b3bbd044629c9c3e))
+
+
+
 # [1.6.0](https://github.com/rabraghib/darijascript/compare/v1.5.1...v1.6.0) (2024-06-06)
 
 
