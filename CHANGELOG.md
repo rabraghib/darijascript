@@ -1,3 +1,12 @@
+## [1.5.1](https://github.com/rabraghib/darijascript/compare/v1.5.0...v1.5.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* using compatible version of actions ([0a9b31d](https://github.com/rabraghib/darijascript/commit/0a9b31d4227d89e8fb3eacb9b244eaf5ed4d4934))
+
+
+
 # [1.5.0](https://github.com/rabraghib/darijascript/compare/v1.4.0...v1.5.0) (2024-06-06)
 
 
