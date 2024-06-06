@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description: 'The greatest language that ever was or will be!',
   openGraph: {
     type: 'website',
+    siteName: 'DarijaScript',
     url: 'https://darijascript.rabraghib.me',
     title: 'DarijaScript Programming Language',
     description: 'The greatest language that ever was or will be!',

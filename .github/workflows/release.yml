@@ -52,7 +52,7 @@ jobs:
           cd language-service
           vsce package ${{ needs.release-up.outputs.version }} -o ../bin/darijascript-vscode-extension-${{ needs.release-up.outputs.tag }}.vsix
       - name: Archive vscode extension
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: darijascript-vscode-extension
           path: language-service/*.vsix
