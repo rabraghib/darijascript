@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/rabraghib/darijascript/compare/v1.5.1...v1.6.0) (2024-06-06)
+
+
+### Features
+
+* working web assembly based playground ([3fe0872](https://github.com/rabraghib/darijascript/commit/3fe0872419cf1b4270e39e674eb7aa93a091e0e7))
+
+
+
 ## [1.5.1](https://github.com/rabraghib/darijascript/compare/v1.5.0...v1.5.1) (2024-06-06)
 
 
