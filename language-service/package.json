@@ -1,6 +1,6 @@
 {
   "name": "ds-language-service",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "publisher": "rabraghib",
   "displayName": "DarijaScript Language Service",
   "description": "Provides syntax highlighting and bracket matching for DarijaScript.",

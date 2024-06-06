@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/rabraghib/darijascript/compare/v1.4.0...v1.5.0) (2024-06-06)
+
+
+### Features
+
+* support floats & refactor playground to web assembly ([9218e5b](https://github.com/rabraghib/darijascript/commit/9218e5bb7d1670f864cda3839d12e025149aadb2))
+
+
+
 # [1.4.0](https://github.com/rabraghib/darijascript/compare/v1.3.16...v1.4.0) (2024-04-10)
 
 
