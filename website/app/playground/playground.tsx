@@ -55,7 +55,8 @@ export default function PlaygroundPage({
     <LoadWasm
       writeOutput={(output: string) => {
         terminal.write(output);
-        terminal.refresh(0, terminal.buffer.active.cursorY);
+        // TODO: fix terminal not refreshed immediately
+        // terminal.refresh(0, terminal.buffer.active.cursorY);
       }}
     >
       <div className="h-[calc(100vh-4rem)] w-full grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">

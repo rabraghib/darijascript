@@ -10,7 +10,6 @@ async function loadWasm(writeOutput: (output: string) => void): Promise<void> {
     goWasm.importObject
   );
 
-  let outputBuf = '';
   const decoder = new TextDecoder('utf-8');
   window.fs.writeSync = function (fd, buf) {
     const output = decoder.decode(buf);
