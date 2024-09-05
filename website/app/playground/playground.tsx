@@ -196,7 +196,7 @@ function PlaygroundSection({
         <h2 className="text-lg font-medium">{title}</h2>
         {actions && <div className="flex justify-end space-x-4">{actions}</div>}
       </div>
-      <div>{children}</div>
+      <div className="size-full overflow-auto">{children}</div>
     </section>
   );
 }

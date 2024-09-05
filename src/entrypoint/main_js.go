@@ -10,7 +10,12 @@ import (
 )
 
 func Entrypoint() {
-	js.Global().Set("runDarijaScript", js.FuncOf(wasmRunner))
+	js.Global().Set("runDarijaScript", js.FuncOf(
+		func(this js.Value, p []js.Value) interface{} {
+			go wasmRunner(this, p)
+			return nil
+		},
+	))
 
 	select {}
 }
