@@ -1,3 +1,13 @@
+# [1.7.0](https://github.com/rabraghib/darijascript/compare/v1.6.3...v1.7.0) (2024-11-19)
+
+
+### Features
+
+* adjust playground ([a82391c](https://github.com/rabraghib/darijascript/commit/a82391cc1827495c705e802db91e479267e5f566))
+* hardcore array's implementation ([488bd32](https://github.com/rabraghib/darijascript/commit/488bd32166ce882e23745f28dbcdcb660cab6f9c))
+
+
+
 ## [1.6.3](https://github.com/rabraghib/darijascript/compare/v1.6.2...v1.6.3) (2024-09-05)
 
 
