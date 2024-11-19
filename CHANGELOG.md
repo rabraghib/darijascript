@@ -1,3 +1,12 @@
+## [1.6.3](https://github.com/rabraghib/darijascript/compare/v1.6.2...v1.6.3) (2024-09-05)
+
+
+### Bug Fixes
+
+* some adjustments ([1b4678e](https://github.com/rabraghib/darijascript/commit/1b4678eeca631ae7fa03789c4e5294302af1e596))
+
+
+
 ## [1.6.2](https://github.com/rabraghib/darijascript/compare/v1.6.1...v1.6.2) (2024-09-05)
 
 
