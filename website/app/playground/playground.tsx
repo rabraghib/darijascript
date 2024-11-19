@@ -8,9 +8,11 @@ import '@xterm/xterm/css/xterm.css';
 import { FitAddon } from '@xterm/addon-fit';
 import DarijaScript, { FontSizeThemeExtension } from './codemirror/codemirror';
 import { ICodingExample } from './examples';
-import { githubDark } from '@uiw/codemirror-theme-github';
+import { githubDarkInit, githubLightInit } from '@uiw/codemirror-theme-github';
 import { LoadWasm } from '../LoadWasm';
 import { useRouter } from 'next/navigation';
+
+import { tagHighlighter, tags } from '@lezer/highlight';
 
 export default function PlaygroundPage({
   examples,
@@ -157,7 +159,31 @@ function AppCodeEditor({
       value={value}
       lang="darijascript"
       className="h-full w-full"
-      theme={githubDark}
+      theme={githubDarkInit({
+        styles: [
+          {
+            tag: tags.definitionKeyword,
+            color: '#b972cf',
+          },
+          {
+            tag: tags.operator,
+            color: '#c9d1d9',
+          },
+          {
+            tag: tags.string,
+            color: '#93bd76',
+          },
+          {
+            tag: tags.number,
+            color: '#b1855d',
+          },
+          // {
+          //   tag: [tags.function(tags.variableName)],
+          //   color: 'yellow',
+          // },
+          // { tag: tags.definition(tags.variableName), color: 'yellow' },
+        ],
+      })}
       onChange={(value) => {
         onChange(value);
       }}

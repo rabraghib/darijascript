@@ -8,7 +8,7 @@ export default function DarijaScript() {
 
 const FontSizeTheme = EditorView.theme({
   '&': {
-    fontSize: '125%',
+    fontSize: '115%',
   },
 });
 export const FontSizeThemeExtension: Extension = [FontSizeTheme];
