@@ -1,0 +1,78 @@
+9ayed GRAPH = l(
+  l(0, 1, 5, 0, 0, 0),
+  l(1, 0, 0, 4, 2, 0),
+  l(5, 0, 0, 0, 3, 7),
+  l(0, 4, 0, 0, 5, 0),
+  l(0, 2, 3, 5, 0, 1),
+  l(0, 0, 7, 0, 1, 0)
+);
+
+9ayed resultDjikstra = djikstra(GRAPH);
+golihA9ssarPaths(resultDjikstra, "");
+
+fonksyon golihA9ssarPaths(arr, name) {
+    9ayed i = 0;
+    ma7dBa9i(i < len(arr)) {
+        golih("MIN" + name + "[" + toLetter(i) + "]: " + ara(arr, i, 0));
+        9ayed path = ""; 
+        9ayed prev = ara(arr, i, 1);
+        ma7dBa9i(prev != -1 && prev != 0) {
+            path = " -> " + toLetter(prev) + path;
+            prev = ara(arr, prev, 1);
+        }
+        path = toLetter(prev) + path + " -> " + toLetter(i);
+        golih("Path: " + path);
+        golih("");
+        i = i + 1;
+    }
+}
+
+
+fonksyon djikstra(graph) {
+  9ayed start = 0;
+  9ayed visited = dirRow(len(graph), ghalt);
+  9ayed distance = dirRow(len(graph), l(infini(), -1));
+  atih(distance, start, l(0, 0));
+  
+  9ayed i = 0;
+  9ayed continue = s7i7;
+  
+  ma7dBa9i(i < len(graph) && continue) {
+    9ayed minNode = -1;
+    9ayed j = 0;
+    ma7dBa9i(j < len(graph)) {
+      ilamakanch (ara(visited, j)) {
+        ilakan (minNode == -1) {
+          minNode = j;
+        } sinn {
+          ilakan (ara(distance, j, 0) < ara(distance, minNode, 0)) {
+            minNode = j;
+          }
+        }
+      }
+      j = j + 1;
+    }
+    
+    ilakan (minNode == -1) {
+      continue = ghalt;
+    } sinn {
+      atih(visited, minNode, s7i7);
+      
+      9ayed neighbor = 0;
+      ma7dBa9i(neighbor < len(graph)) {
+        ilakan (ara(graph, minNode, neighbor) != 0) {
+          9ayed newDist = (ara(distance, minNode, 0)) + (ara(graph, minNode, neighbor));
+          
+          ilakan (newDist < ara(distance, neighbor, 0)) {
+            atih(distance, neighbor, l(newDist, minNode));
+          }
+        }
+        neighbor = neighbor + 1;
+      }
+      
+      i = i + 1;
+    }
+  }
+
+  rjje3 distance;
+}

@@ -46,7 +46,11 @@ func (eval *Evaluator) evaluateExpression(expression parser.Expression) (interfa
 		if err != nil {
 			return nil, err
 		}
-		return eval.evaluateInfixExpression(expr.Operator, leftValue, rightValue)
+		val, err2 := eval.evaluateInfixExpression(expr.Operator, leftValue, rightValue)
+		if err2 != nil {
+			fmt.Printf("Error in %d:%d\n", expr.Token.Pos.Line, expr.Token.Pos.Column)
+		}
+		return val, err2
 	case *parser.CallExpression:
 		return eval.evaluateCallExpression(expr)
 	// case *parser.ArrayLiteral:
@@ -240,8 +244,16 @@ func toBool(value interface{}) (bool, error) {
 
 func toNumber(value interface{}) (float64, error) {
 	switch v := value.(type) {
-	case int64, int32, int16, int8, int:
-		return float64(v.(int64)), nil
+	case int64:
+		return float64(v), nil
+	case int32:
+		return float64(v), nil
+	case int16:
+		return float64(v), nil
+	case int8:
+		return float64(v), nil
+	case int:
+		return float64(v), nil
 	case float64:
 		return v, nil
 	case string:

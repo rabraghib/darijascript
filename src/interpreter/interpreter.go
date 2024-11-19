@@ -113,7 +113,13 @@ func (eval *Evaluator) evaluateLetStatement(stmt *parser.LetStatement) error {
 	if err != nil {
 		return err
 	}
-	return eval.env.Set(stmt.Name.Value, val)
+	err = eval.env.Set(stmt.Name.Value, val)
+
+	if err != nil {
+		fmt.Printf("9ayed %s @ %d:%d\n", stmt.Name.Value, stmt.Name.Token.Pos.Column, stmt.Name.Token.Pos.Line)
+	}
+
+	return err
 }
 
 func (eval *Evaluator) evaluateBlockStatement(block *parser.BlockStatement) (interface{}, error) {
