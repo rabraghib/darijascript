@@ -1,3 +1,12 @@
+## [1.7.1](https://github.com/rabraghib/darijascript/compare/v1.7.0...v1.7.1) (2024-11-19)
+
+
+### Bug Fixes
+
+* allow redeclaring var in different scopes ([d20f600](https://github.com/rabraghib/darijascript/commit/d20f6000bc47a53fcaeecc1db34b433b04d384d4))
+
+
+
 # [1.7.0](https://github.com/rabraghib/darijascript/compare/v1.6.3...v1.7.0) (2024-11-19)
 
 
