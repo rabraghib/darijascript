@@ -2,11 +2,12 @@
 
 import { ICodingExample } from './examples';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
-import Playground from './playground';
 import { githubDark } from '@uiw/codemirror-theme-github';
 import DarijaScript, { FontSizeThemeExtension } from './codemirror/codemirror';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 const DynamicPlaygroundWithNoSSR = dynamic(() => import('./playground'), {
   ssr: false,
@@ -17,20 +18,22 @@ export default function PlaygroundManager({
 }: {
   examples: ICodingExample[];
 }) {
-  const [selectedExample, setSelectedExample] = useState<number | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const starterKey = searchParams.get('starter');
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [selectedExample]);
+    if (starterKey !== null) {
+      if (examples.every((example) => example.key !== starterKey)) {
+        router.replace('/playground');
+      }
+    }
+  }, [router, starterKey, examples]);
 
-  if (selectedExample !== null) {
+  if (starterKey !== null) {
     return (
-      <DynamicPlaygroundWithNoSSR
-        examples={examples}
-        selectedIndex={selectedExample}
-        onClose={() => setSelectedExample(null)}
-        onSelectedIndexChange={(index) => setSelectedExample(index)}
-      />
+      <DynamicPlaygroundWithNoSSR examples={examples} starterKey={starterKey} />
     );
   }
   return (
@@ -41,12 +44,7 @@ export default function PlaygroundManager({
       </div>
       <div className="grid lg:grid-cols-2 gap-6">
         {examples.map((example, index) => (
-          <ExampleCard
-            key={example.name}
-            name={example.name}
-            code={example.code}
-            onTryClick={() => setSelectedExample(index)}
-          />
+          <ExampleCard key={example.key} example={example} />
         ))}
       </div>
     </div>
@@ -54,28 +52,24 @@ export default function PlaygroundManager({
 }
 
 function ExampleCard({
-  name,
-  code,
-  onTryClick,
+  example,
 }: Readonly<{
-  name: string;
-  code: string;
-  onTryClick?: () => void;
+  example: ICodingExample;
 }>) {
   'use client';
   return (
     <div className="bg-gray-800 p-4 rounded-lg">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">{name}</h2>
-        <button
+        <h2 className="text-xl font-bold">{example.name}</h2>
+        <Link
+          href={`/playground?starter=${example.key}`}
           className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br font-medium rounded text-sm px-3 py-1 text-center"
-          onClick={onTryClick}
         >
           Try it!
-        </button>
+        </Link>
       </div>
       <CodeMirror
-        value={code}
+        value={example.code}
         lang="darijascript"
         className="h-44 w-full mt-4"
         theme={githubDark}

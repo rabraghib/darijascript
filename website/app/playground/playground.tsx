@@ -10,17 +10,14 @@ import DarijaScript, { FontSizeThemeExtension } from './codemirror/codemirror';
 import { ICodingExample } from './examples';
 import { githubDark } from '@uiw/codemirror-theme-github';
 import { LoadWasm } from '../LoadWasm';
+import { useRouter } from 'next/navigation';
 
 export default function PlaygroundPage({
   examples,
-  selectedIndex,
-  onClose = () => {},
-  onSelectedIndexChange,
+  starterKey,
 }: Readonly<{
-  selectedIndex: number;
+  starterKey: string;
   examples: ICodingExample[];
-  onClose?: () => void;
-  onSelectedIndexChange: (index: number) => void;
 }>) {
   const terminal = useMemo(() => {
     return new Terminal({
@@ -29,13 +26,14 @@ export default function PlaygroundPage({
     });
   }, []);
   const terminalRef = useRef<HTMLDivElement>(null);
-  const [code, setCode] = useState<string>(examples[selectedIndex]?.code ?? ``);
+  const [code, setCode] = useState<string>(
+    examples.find((example) => example.key === starterKey)?.code ?? ``
+  );
 
   useEffect(() => {
-    if (examples[selectedIndex]) {
-      setCode(examples[selectedIndex].code);
-    }
-  }, [examples, selectedIndex]);
+    const example = examples.find((example) => example.key === starterKey);
+    setCode(example?.code ?? '');
+  }, [examples, starterKey]);
 
   useEffect(() => {
     if (!terminalRef.current) return;
@@ -55,20 +53,13 @@ export default function PlaygroundPage({
     <LoadWasm
       writeOutput={(output: string) => {
         terminal.write(output);
-        // TODO: fix terminal not refreshed immediately
-        // terminal.refresh(0, terminal.buffer.active.cursorY);
       }}
     >
       <div className="h-[calc(100vh-4rem)] w-full grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
         <div className="w-full h-full border-r border-slate-500">
           <PlaygroundSection
             title={
-              <CodeEditorTitle
-                examples={examples}
-                selectedIndex={selectedIndex}
-                onClose={onClose}
-                onSelectedIndexChange={onSelectedIndexChange}
-              />
+              <CodeEditorTitle examples={examples} starterKey={starterKey} />
             }
             actions={<CodeEditorActions onRun={runCode} />}
           >
@@ -89,20 +80,17 @@ export default function PlaygroundPage({
 }
 
 function CodeEditorTitle({
-  onClose,
   examples,
-  selectedIndex,
-  onSelectedIndexChange,
+  starterKey,
 }: Readonly<{
-  onClose: () => void;
+  starterKey: string;
   examples: ICodingExample[];
-  selectedIndex: number;
-  onSelectedIndexChange: (index: number) => void;
 }>) {
+  const router = useRouter();
   return (
     <div className="flex items-center space-x-2">
       <button
-        onClick={onClose}
+        onClick={() => router.push('/playground')}
         className="border rounded p-1 text-center inline-flex items-center border-slate-500 hover:bg-slate-900 hover:bg-opacity-50"
       >
         <svg
@@ -121,15 +109,17 @@ function CodeEditorTitle({
         </svg>
       </button>
       <select
-        value={selectedIndex}
+        value={starterKey}
         onChange={(e) => {
-          const index = parseInt(e.target.value);
-          onSelectedIndexChange(index);
+          const starterKey = e.target.value;
+          if (starterKey) {
+            router.push(`/playground?starter=${starterKey}`);
+          }
         }}
         className="bg-slate-950 text-white border border-slate-500 rounded p-1.5 text-sm min-w-52"
       >
-        {examples.map((example, index) => (
-          <option key={example.name} value={index}>
+        {examples.map((example) => (
+          <option key={example.key} value={example.key}>
             {example.name}
           </option>
         ))}
