@@ -1,4 +1,4 @@
-9ayed GRAPH = l(
+9ayed graph = l(
   l(0, 1, 5, 0, 0, 0),
   l(1, 0, 0, 4, 2, 0),
   l(5, 0, 0, 0, 3, 7),
@@ -7,18 +7,18 @@
   l(0, 0, 7, 0, 1, 0)
 );
 
-9ayed resultDjikstra = djikstra(GRAPH);
-golihA9ssarPaths(resultDjikstra, "");
+9ayed result = djikstra(graph);
+golihA9ssarPaths(result);
 
-fonksyon golihA9ssarPaths(arr, name) {
+fonksyon golihA9ssarPaths(result) {
     9ayed i = 0;
-    ma7dBa9i(i < len(arr)) {
-        golih("MIN" + name + "[" + toLetter(i) + "]: " + ara(arr, i, 0));
+    ma7dBa9i(i < len(result)) {
+        golih("MIN[" + toLetter(i) + "]: " + ara(result, i, 0));
         9ayed path = ""; 
-        9ayed prev = ara(arr, i, 1);
+        9ayed prev = ara(result, i, 1);
         ma7dBa9i(prev != -1 && prev != 0) {
             path = " -> " + toLetter(prev) + path;
-            prev = ara(arr, prev, 1);
+            prev = ara(result, prev, 1);
         }
         path = toLetter(prev) + path + " -> " + toLetter(i);
         golih("Path: " + path);

@@ -41,7 +41,7 @@ func (env *Environment) Get(name string) (interface{}, bool) {
 }
 
 func (env *Environment) Set(name string, value interface{}) error {
-	_, ok := env.Get(name)
+	_, ok := env.store[name]
 	if ok {
 		return fmt.Errorf("id %s already declared", name)
 	}
